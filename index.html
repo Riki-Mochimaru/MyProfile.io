@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riki Mochimaru</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="logo">RM</a>
+      <nav class="nav">
+        <a href="#works">Works</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="hero-label">Portfolio</p>
+        <h1 class="hero-name">Riki<br>Mochimaru</h1>
+        <p class="hero-title">Software Engineer</p>
+        <div class="hero-line"></div>
+        <p class="hero-desc">
+          プロダクトをつくることを仕事にしています。<br>
+          バックエンドからフロントエンドまで幅広く対応します。
+        </p>
+        <a href="#works" class="scroll-down" aria-label="Scroll to Works">
+          <span></span>
+        </a>
+      </div>
+    </section>
+
+    <section id="works" class="section">
+      <div class="section-inner">
+        <h2 class="section-title">Works</h2>
+        <div class="works-grid">
+          <article class="work-card">
+            <span class="work-year">2024</span>
+            <h3 class="work-name">Project Alpha</h3>
+            <p class="work-desc">Webアプリケーションの設計・開発。ユーザー認証・ダッシュボード機能を実装。</p>
+            <div class="work-tags">
+              <span>React</span><span>Node.js</span><span>PostgreSQL</span>
+            </div>
+            <a href="#" class="work-link" target="_blank" rel="noopener">View →</a>
+          </article>
+          <article class="work-card">
+            <span class="work-year">2023</span>
+            <h3 class="work-name">Project Beta</h3>
+            <p class="work-desc">モバイルファーストのECサイト構築。パフォーマンス最適化によりLighthouse スコア95+を達成。</p>
+            <div class="work-tags">
+              <span>Next.js</span><span>Tailwind</span><span>Stripe</span>
+            </div>
+            <a href="#" class="work-link" target="_blank" rel="noopener">View →</a>
+          </article>
+          <article class="work-card">
+            <span class="work-year">2023</span>
+            <h3 class="work-name">Project Gamma</h3>
+            <p class="work-desc">社内向け管理ツールのリアーキテクチャ。モノリスをマイクロサービスへ移行。</p>
+            <div class="work-tags">
+              <span>Go</span><span>Docker</span><span>Kubernetes</span>
+            </div>
+            <a href="#" class="work-link" target="_blank" rel="noopener">View →</a>
+          </article>
+          <article class="work-card">
+            <span class="work-year">2022</span>
+            <h3 class="work-name">Project Delta</h3>
+            <p class="work-desc">データ可視化ダッシュボードの開発。リアルタイム更新とインタラクティブなチャートを実装。</p>
+            <div class="work-tags">
+              <span>TypeScript</span><span>D3.js</span><span>WebSocket</span>
+            </div>
+            <a href="#" class="work-link" target="_blank" rel="noopener">View →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="section section--alt">
+      <div class="section-inner">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-list">
+          <div class="skill-group">
+            <h3 class="skill-group-title">Frontend</h3>
+            <ul>
+              <li>HTML / CSS / JavaScript</li>
+              <li>TypeScript</li>
+              <li>React / Next.js</li>
+              <li>Vue.js</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3 class="skill-group-title">Backend</h3>
+            <ul>
+              <li>Node.js / Express</li>
+              <li>Go</li>
+              <li>Python</li>
+              <li>REST / GraphQL</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3 class="skill-group-title">Infrastructure</h3>
+            <ul>
+              <li>Docker / Kubernetes</li>
+              <li>AWS / GCP</li>
+              <li>PostgreSQL / Redis</li>
+              <li>GitHub Actions / CI</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="section-inner section-inner--narrow">
+        <h2 class="section-title">Contact</h2>
+        <p class="contact-lead">
+          お仕事のご依頼やご質問はお気軽にどうぞ。
+        </p>
+        <div class="contact-links">
+          <a href="https://github.com/Riki-MochimaruD" target="_blank" rel="noopener" class="contact-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.014-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+            GitHub
+          </a>
+          <a href="mailto:your.email@example.com" class="contact-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            Email
+          </a>
+          <a href="https://twitter.com/" target="_blank" rel="noopener" class="contact-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            X (Twitter)
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2024 Riki Mochimaru</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
