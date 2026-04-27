@@ -1,108 +1,466 @@
 <!DOCTYPE html>
+<!--
+  ╔════════════════════════════════════════════════════════════╗
+  ║         持丸理貴 プロフィールサイト                         ║
+  ║         index.html  —  ページの「骨格」を定義するファイル  ║
+  ╚════════════════════════════════════════════════════════════╝
+
+  【HTMLとは？】
+  HTML (HyperText Markup Language) はウェブページの「骨格」です。
+  文書の「構造」（何がどこにあるか）を定義します。
+    - 見た目（色・フォント・レイアウト）→ style.css
+    - 動き（アニメーション・スクロール効果）→ main.js
+    - 内容（テキスト・画像）→ このファイル (index.html)
+
+  【タグとは？】
+  <タグ名> コンテンツ </タグ名> という形式で要素を囲みます。
+  例: <h1>見出し</h1>  <p>段落</p>  <a href="URL">リンク</a>
+-->
 <html lang="ja">
+<!-- lang="ja" はブラウザや検索エンジンに「このページは日本語」と伝えます -->
+
 <head>
+  <!--
+    ═══════════════════════════════════════════════
+    head セクション: ブラウザへの「設定・指示」置き場
+    ここに書いた内容はページ上には表示されません。
+    ═══════════════════════════════════════════════
+  -->
+
+  <!-- 文字コード: UTF-8 は日本語・絵文字も正しく表示できる設定 -->
   <meta charset="UTF-8" />
+
+  <!--
+    viewport: スマートフォン対応の必須設定
+    width=device-width → 画面幅に合わせてレイアウト
+    initial-scale=1.0 → 最初のズーム倍率は 100%（拡大・縮小なし）
+  -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>持丸理貴 - Riki Mochimaru</title>
+
+  <!-- ページタイトル: ブラウザのタブに表示される文字 -->
+  <title>持丸理貴 — Riki Mochimaru</title>
+
+  <!--
+    Google Fonts の読み込み (インターネット接続が必要)
+    preconnect → フォントサーバーへの接続を先に準備する最適化
+    Inter      → 読みやすい欧文サンセリフ体（本文・UI用）
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- 外部 CSS ファイルを読み込む（見た目はすべてここで定義） -->
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <!--
+    ═══════════════════════════════════════════════
+    <header>: サイト上部の固定ナビゲーションバー
+    スクロールしても常に画面の一番上に固定されます。
+    ═══════════════════════════════════════════════
+  -->
   <header class="site-header">
     <div class="header-inner">
+
+      <!-- ロゴ: 頭文字 "RM" をクリックするとページトップへ戻る -->
+      <!-- href="#" は「このページの一番上」を意味する -->
       <a href="#" class="logo">RM</a>
-      <nav class="nav">
+
+      <!--
+        <nav>: ナビゲーション（目次リンク）
+        href="#research" → 同じページの id="research" の要素へジャンプ
+        aria-label → スクリーンリーダー（視覚障害者向け）用の説明文
+      -->
+      <nav class="nav" aria-label="メインナビゲーション">
         <a href="#research">Research</a>
         <a href="#activities">Activities</a>
         <a href="#contact">Contact</a>
       </nav>
+
     </div>
   </header>
 
+  <!--
+    <main>: ページのメインコンテンツ置き場
+    SEO（検索エンジン最適化）と
+    アクセシビリティのためにこのタグで囲みます。
+  -->
   <main>
-    <section class="hero">
-      <div class="hero-inner">
-        <div class="profile-img-wrapper">
-          <img src="profile.jpg" alt="持丸理貴" class="profile-img">
-        </div>
-        
-        <p class="hero-label">Profile</p>
-        <h1 class="hero-name">持丸理貴<br><span class="hero-name-en">Riki Mochimaru</span></h1>
-        <p class="hero-title">北海道大学理論宇宙研究室</p>
-        <div class="hero-line"></div>
-        <div class="hero-desc">
-          <p><strong>関心:</strong> 突発天体—コンパクト天体—PIML (transient source—compact object—physics-informed machine learning)</p>
-          <p><strong>趣味:</strong> violin</p>
-        </div>
-        <a href="#research" class="scroll-down" aria-label="Scroll to Research">
-          <span></span>
-        </a>
-      </div>
-    </section>
 
+    <!-- ═══════════════════════════════════════════════
+         ヒーローセクション
+         ページを開いたとき最初に表示される「顔」の部分。
+         名前・所属・研究テーマ・顔写真を大きく表示します。
+         ═══════════════════════════════════════════════ -->
+    <section class="hero">
+
+      <!--
+        star-canvas: 星空のアニメーション描画エリア
+        HTML5 Canvas API を使い、JavaScript で星を描きます。
+        aria-hidden="true" → スクリーンリーダーには読み上げさせない
+        （装飾目的のため、視覚障害者には不要な情報）
+      -->
+      <canvas class="star-canvas" aria-hidden="true"></canvas>
+
+      <!-- hero-inner: コンテンツを左右2列に並べるコンテナ -->
+      <div class="hero-inner">
+
+        <!-- ─── 左カラム: テキスト情報 ─── -->
+        <div class="hero-text">
+
+          <!-- 肩書きラベル（小さな上書き文字） -->
+          <p class="hero-label">Astrophysicist / Researcher</p>
+
+          <!--
+            <h1>: ページで最も重要な見出し（h1 はページに1つだけ推奨）
+            clamp() でフォントサイズをウィンドウ幅に応じて自動調整します。
+          -->
+          <h1 class="hero-name">
+            持丸理貴
+            <!-- <span> はテキストの一部に別スタイルを当てるタグ -->
+            <!-- display: block で改行して英語名を別行に -->
+            <span class="hero-name-en">Riki Mochimaru</span>
+          </h1>
+
+          <!-- 所属機関 -->
+          <p class="hero-affiliation">
+            北海道大学 理論宇宙研究室
+          </p>
+
+          <!--
+            研究テーマ・趣味のタグ
+            aria-label でスクリーンリーダーに「研究関心」と伝える
+          -->
+          <div class="hero-tags" aria-label="研究関心と趣味">
+            <span class="tag">突発天体</span>
+            <span class="tag">コンパクト天体</span>
+            <!-- tag--en: 英語タグは少し違う見た目（CSSクラスで制御） -->
+            <span class="tag tag--en">PIML</span>
+            <!-- tag--hobby: 趣味タグは紫系の色 -->
+            <span class="tag tag--hobby">Violin</span>
+          </div>
+
+          <!--
+            スクロール誘導ボタン
+            クリックすると Research セクションへスクロール
+          -->
+          <a href="#research" class="scroll-cta" aria-label="研究セクションへスクロール">
+            <span class="cta-text">View Research</span>
+            <!-- aria-hidden: 矢印記号はスクリーンリーダーには読み上げ不要 -->
+            <span class="cta-arrow" aria-hidden="true">↓</span>
+          </a>
+
+        </div><!-- /.hero-text -->
+
+        <!-- ─── 右カラム: 顔写真 ─── -->
+        <div class="hero-photo-col">
+          <!--
+            photo-ring-outer: グラデーションで光るリング（外側）
+            conic-gradient でグラデーションの輪を作り、
+            アニメーションでゆっくり回転させます。
+          -->
+          <div class="photo-ring-outer" aria-hidden="true">
+            <div class="photo-ring-inner">
+              <!--
+                <img>: 画像タグ
+                  src → 画像ファイルのパス（同じフォルダの profile.jpg）
+                  alt → 画像が表示できない場合の代替テキスト
+                        スクリーンリーダーも読み上げます
+                  loading="eager" → すぐに読み込む（ヒーロー画像なので）
+              -->
+              <img
+                src="profile.jpg"
+                alt="持丸理貴の顔写真"
+                class="profile-img"
+                loading="eager"
+              >
+            </div>
+          </div>
+        </div><!-- /.hero-photo-col -->
+
+      </div><!-- /.hero-inner -->
+    </section><!-- /.hero -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         Publications セクション（論文・業績）
+
+         id="research" → ナビゲーションの href="#research" が
+         ここへジャンプするための「アンカー（目印）」です。
+         ═══════════════════════════════════════════════ -->
     <section id="research" class="section">
       <div class="section-inner">
-        <h2 class="section-title">Publications</h2>
-        <div class="works-grid">
-          <article class="work-card">
-            <span class="work-year">Unpublished</span>
-            <h3 class="work-name">Development of Closure Relations for Astrophysical Turbulence Simulations Using an Image-Generating AI Model.</h3>
-            <p class="work-desc">未出版</p>
-          </article>
-        </div>
-      </div>
-    </section>
 
+        <!-- セクションタイトル -->
+        <h2 class="section-title">Publications</h2>
+
+        <!-- 論文カードのリスト -->
+        <div class="pub-list">
+
+          <!--
+            <article>: 独立したコンテンツのまとまりを表すタグ。
+            論文1件分の情報を article で囲むのが意味的に正しい。
+          -->
+          <article class="pub-card">
+
+            <!-- ステータスバッジ: 出版状態を示す小さなラベル -->
+            <!-- pub-status--pending → CSS で黄色のバッジになる -->
+            <span class="pub-status pub-status--pending">Unpublished</span>
+
+            <!-- 論文タイトル（h3 は h2 の子見出し） -->
+            <h3 class="pub-title">
+              Development of Closure Relations for Astrophysical Turbulence
+              Simulations Using an Image-Generating AI Model.
+            </h3>
+
+            <!-- 補足説明 -->
+            <p class="pub-note">（執筆中）</p>
+
+          </article>
+
+          <!--
+            ▼ 論文が増えたらここに追加してください ▼
+            コピー＆ペーストして pub-card ブロックを増やすだけです。
+
+            <article class="pub-card">
+              <span class="pub-status pub-status--published">Published</span>
+              <h3 class="pub-title">論文タイトル</h3>
+              <p class="pub-note">雑誌名, 年, doi: ...</p>
+            </article>
+          -->
+
+        </div><!-- /.pub-list -->
+      </div><!-- /.section-inner -->
+    </section><!-- /#research -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         Activities セクション（イベント参加・発表歴）
+
+         section--alt クラスで背景色を少し変え、
+         視覚的にセクションを区切ります。
+         ═══════════════════════════════════════════════ -->
     <section id="activities" class="section section--alt">
       <div class="section-inner">
-        <h2 class="section-title">Activities</h2>
-        <div class="skills-list">
-          <div class="skill-group">
-            <h3 class="skill-group-title">参加したイベント</h3>
-            <ul>
-              <li>KEKサマーチャレンジ2025</li>
-              <li>国立天文台スプリングスクール2025</li>
-              <li>日本原子力研究開発機構 原子力科学研究所 先端基礎研究センターインターン(2023)</li>
-              <li>数物セミナー26th</li>
-            </ul>
-          </div>
-          <div class="skill-group">
-            <h3 class="skill-group-title">発表</h3>
-            <ul>
-              <li>(記載なし)</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
 
+        <h2 class="section-title">Activities</h2>
+
+        <!-- 2列グリッド: 左に「参加イベント」、右に「発表」 -->
+        <div class="activities-grid">
+
+          <!-- ─── 参加したイベント ─── -->
+          <div class="activity-group">
+
+            <h3 class="activity-group-title">
+              <!--
+                SVG アイコン（カレンダー型）
+                SVG = Scalable Vector Graphics: 拡大しても綺麗なベクター画像。
+                viewBox で描画領域を設定し、path で形を定義します。
+              -->
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14
+                         c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2z
+                         m4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2z
+                         m4 0h-2v2h2v-2z"/>
+              </svg>
+              参加したイベント
+            </h3>
+
+            <!--
+              タイムライン形式のリスト
+              年号バッジ + イベント名 を横並びで表示します。
+            -->
+            <ul class="timeline-list">
+
+              <li class="timeline-item">
+                <span class="timeline-year">2025</span>
+                <span class="timeline-name">KEKサマーチャレンジ</span>
+              </li>
+
+              <li class="timeline-item">
+                <span class="timeline-year">2025</span>
+                <span class="timeline-name">国立天文台スプリングスクール</span>
+              </li>
+
+              <li class="timeline-item">
+                <span class="timeline-year">2024</span>
+                <span class="timeline-name">数物セミナー 26th</span>
+              </li>
+
+              <li class="timeline-item">
+                <span class="timeline-year">2023</span>
+                <span class="timeline-name">
+                  日本原子力研究開発機構 原子力科学研究所<br>
+                  先端基礎研究センター インターン
+                </span>
+              </li>
+
+              <!--
+                ▼ イベントが増えたらここに追加 ▼
+                <li class="timeline-item">
+                  <span class="timeline-year">20XX</span>
+                  <span class="timeline-name">イベント名</span>
+                </li>
+              -->
+
+            </ul>
+          </div><!-- /.activity-group (events) -->
+
+          <!-- ─── 発表 ─── -->
+          <div class="activity-group">
+
+            <h3 class="activity-group-title">
+              <!-- SVG アイコン（プレゼンターシルエット型） -->
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 3H4v10c0 1.1.9 2 2 2h3v2H7v2h10v-2h-2v-2h3c1.1 0 2-.9 2-2V3z
+                         m0 10H4V5h16v8z"/>
+              </svg>
+              発表
+            </h3>
+
+            <ul class="timeline-list">
+              <!--
+                まだ発表歴がないためプレースホルダーを表示。
+                timeline-item--empty クラスで斜体グレーのスタイルが当たります。
+              -->
+              <li class="timeline-item timeline-item--empty">
+                <span class="timeline-name">（準備中）</span>
+              </li>
+            </ul>
+          </div><!-- /.activity-group (presentations) -->
+
+        </div><!-- /.activities-grid -->
+      </div><!-- /.section-inner -->
+    </section><!-- /#activities -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         Contact セクション（連絡先）
+         section-inner--narrow クラスで幅を狭くし
+         読みやすいレイアウトにします。
+         ═══════════════════════════════════════════════ -->
     <section id="contact" class="section">
       <div class="section-inner section-inner--narrow">
-        <h2 class="section-title">Contact</h2>
-        <p class="contact-lead">
-          お問い合わせは以下のメールアドレスまでお願いいたします。
-        </p>
-        <div class="contact-links">
-          <a href="mochimaru.riki.w4#at#elms.hokudai.ac.jp" class="contact-item">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
-            mochimaru.riki.w4#at#elms.hokudai.ac.jp
-          </a>
-          <a href="mochimaru#at#astro1.sci.hokudai.ac.jp" class="contact-item">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
-            mochimaru#at#astro1.sci.hokudai.ac.jp
-          </a>
-          <a href="https://github.com/Riki-Mochimaru" target="_blank" rel="noopener" class="contact-item">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.014-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-            GitHub
-          </a>
-        </div>
-      </div>
-    </section>
-  </main>
 
+        <h2 class="section-title">Contact</h2>
+
+        <p class="contact-lead">
+          お問い合わせは以下のメールアドレスまでお気軽にどうぞ。
+        </p>
+
+        <!-- 連絡先リンクのリスト -->
+        <div class="contact-links">
+
+          <!--
+            ─── メール1（学部メール）───
+            href="mailto:..." → クリックするとメールアプリが開く
+            rel="noopener noreferrer" → 外部リンクのセキュリティ対策
+          -->
+          <a
+            href="mailto:mochimaru.riki.w4@elms.hokudai.ac.jp"
+            class="contact-item"
+            aria-label="学部メールアドレスへ送信"
+          >
+            <!-- メールアイコン（SVG） -->
+            <svg class="contact-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9
+                       2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+            <div class="contact-info">
+              <!-- ラベル: 何のメールアドレスかを小さく表示 -->
+              <span class="contact-label">学部メール</span>
+              <span class="contact-value">mochimaru.riki.w4@elms.hokudai.ac.jp</span>
+            </div>
+            <!-- 矢印アイコン: ホバーで右上に動く -->
+            <svg class="contact-arrow" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 17L17 7M17 7H7M17 7v10"/>
+            </svg>
+          </a>
+
+          <!-- ─── メール2（研究室メール）─── -->
+          <a
+            href="mailto:mochimaru@astro1.sci.hokudai.ac.jp"
+            class="contact-item"
+            aria-label="研究室メールアドレスへ送信"
+          >
+            <svg class="contact-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9
+                       2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+            <div class="contact-info">
+              <span class="contact-label">研究室メール</span>
+              <span class="contact-value">mochimaru@astro1.sci.hokudai.ac.jp</span>
+            </div>
+            <svg class="contact-arrow" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 17L17 7M17 7H7M17 7v10"/>
+            </svg>
+          </a>
+
+          <!--
+            ─── GitHub ───
+            target="_blank" → 新しいタブで開く
+            rel="noopener noreferrer" → 新しいタブを悪用されないセキュリティ設定
+          -->
+          <a
+            href="https://github.com/Riki-Mochimaru"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contact-item"
+            aria-label="GitHub プロフィールを新しいタブで開く"
+          >
+            <!-- GitHub ロゴ（SVG） -->
+            <svg class="contact-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839
+                       9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.014-1.7
+                       -2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463
+                       -1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03
+                       1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088
+                       .636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984
+                       1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75
+                       1.026A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337
+                       1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1
+                       2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687
+                       -4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415
+                       -.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22
+                       12c0-5.523-4.477-10-10-10z"/>
+            </svg>
+            <div class="contact-info">
+              <span class="contact-label">GitHub</span>
+              <span class="contact-value">github.com/Riki-Mochimaru</span>
+            </div>
+            <svg class="contact-arrow" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 17L17 7M17 7H7M17 7v10"/>
+            </svg>
+          </a>
+
+        </div><!-- /.contact-links -->
+      </div><!-- /.section-inner -->
+    </section><!-- /#contact -->
+
+  </main><!-- /main -->
+
+
+  <!-- フッター: ページの一番下 -->
   <footer class="site-footer">
-    <p>&copy; 2024 Riki Mochimaru</p>
+    <!--
+      &copy; は著作権マーク © の HTML 実体参照です。
+      ブラウザが © として表示してくれます。
+    -->
+    <p>&copy; 2026 Riki Mochimaru. All rights reserved.</p>
   </footer>
 
+
+  <!--
+    JavaScript ファイルの読み込み
+    <body> の「末尾」に書くのが重要:
+    HTMLが全部読み込まれてから JS が実行されるので、
+    「まだ存在しない要素を操作しようとしてエラー」が起きません。
+  -->
   <script src="main.js"></script>
+
 </body>
 </html>

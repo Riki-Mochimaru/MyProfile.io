@@ -1,408 +1,944 @@
-/* ===========================
-   Reset & Base
-   =========================== */
-   *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
+/*
+  ╔════════════════════════════════════════════════════════════╗
+  ║         持丸理貴 プロフィールサイト                         ║
+  ║         style.css  —  ページの「見た目」を定義するファイル ║
+  ╚════════════════════════════════════════════════════════════╝
+
+  【CSS とは？】
+  CSS (Cascading Style Sheets) は HTML の「見た目」を定義します。
+  「セレクター { プロパティ: 値; }」という形式で書きます。
+
+  例:
+    .hero-name { color: white; font-size: 48px; }
+    → クラス名 hero-name を持つ要素を白・48px にする
+
+  【このサイトのデザインコンセプト】
+  宇宙・天文研究者らしい「深宇宙」テーマ:
+    - 背景: 深い紺黒 (宇宙の暗さ)
+    - テキスト: 青白い光 (星の光)
+    - アクセント: 宇宙的な青紫
+    - 顔写真周り: 回転するグラデーションリング
+
+  ──────────────────────────────────────────
+  目次
+    1. カスタムプロパティ (CSS 変数)  — 色・フォント・サイズ
+    2. リセット & ベース              — ブラウザ差異の吸収
+    3. ヘッダー                       — 固定ナビゲーション
+    4. ヒーローセクション             — 最初に表示される画面
+    5. セクション共通                 — 各コンテンツ区画の共通設定
+    6. Publications                   — 論文カード
+    7. Activities                     — タイムライン
+    8. Contact                        — 連絡先
+    9. フッター
+   10. アニメーション                 — フェードイン
+   11. レスポンシブ対応               — スマホ / タブレット
+  ──────────────────────────────────────────
+*/
+
+
+/* ═══════════════════════════════════════════════
+   1. カスタムプロパティ（CSS 変数）
+
+   --variable-name: value; で変数を定義し、
+   var(--variable-name) で呼び出せます。
+   「テーマカラーを変えたい」ときはここだけ変えれば
+   サイト全体に反映される便利な仕組みです。
+   ═══════════════════════════════════════════════ */
+:root {
+  /* ───── 背景色 ───── */
+  /* 深宇宙の暗い紺黒: HSLでいうと色相 220°, 明度 7% */
+  --bg:        #070c18;
+  /* セカンダリ背景: 交互セクション・カード用に少し明るい */
+  --bg-alt:    #0c1426;
+  /* カード背景: ボーダーで浮き上がって見えるよう少し明るく */
+  --bg-card:   #111827;
+
+  /* ───── テキスト色 ───── */
+  /* メインテキスト: 星の光のような青白 */
+  --fg:        #e2e8f5;
+  /* サブテキスト: やや暗い青灰色 */
+  --muted:     #6b7faa;
+
+  /* ───── ボーダー・区切り線 ───── */
+  /* 半透明の細い線: rgba(r, g, b, a) の a が透明度 0〜1 */
+  --border:    rgba(99, 128, 195, 0.18);
+
+  /* ───── アクセントカラー ───── */
+  /* 宇宙的な青: ボタン・リンク・強調に使用 */
+  --accent:    #6e8efb;
+  /* グロー(光彩)エフェクト用の半透明バージョン */
+  --glow:      rgba(110, 142, 251, 0.22);
+  /* タグのうっすらした背景色 */
+  --tag-bg:    rgba(110, 142, 251, 0.10);
+
+  /* ───── フォント ───── */
+  /*
+    Inter: Google からロードした欧文フォント
+    Hiragino Sans: macOS の日本語フォント
+    Meiryo: Windows の日本語フォント
+    sans-serif: どのフォントもなければシステムデフォルト
+  */
+  --font-sans: 'Inter', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+               Meiryo, sans-serif;
+
+  /* ───── レイアウト ───── */
+  /* ナビゲーションバーの高さ */
+  --nav-h:       64px;
+  /* コンテンツが広がる最大幅 */
+  --max-w:       1100px;
+  /* セクションの上下余白 */
+  --section-py:  100px;
+}
+
+
+/* ═══════════════════════════════════════════════
+   2. リセット & ベーススタイル
+
+   ブラウザ（Chrome・Safari・Firefox）ごとに
+   デフォルトの margin や padding が異なるため、
+   まず全要素をリセットして一貫した見た目にします。
+   ═══════════════════════════════════════════════ */
+
+/* * は「すべての要素」に適用するセレクター */
+/* ::before と ::after は擬似要素（CSS で生成するコンテンツ） */
+*, *::before, *::after {
+  /*
+    box-sizing: border-box
+    「幅」の計算に padding と border を含める設定。
+    デフォルトの content-box だと
+    width: 200px + padding: 20px = 合計 240px になってしまいますが、
+    border-box にすると width: 200px の中に padding が収まります。
+    これでレイアウトの計算が直感的になります。
+  */
+  box-sizing: border-box;
+  margin: 0;   /* 余白をリセット */
+  padding: 0;  /* 内側余白をリセット */
+}
+
+html {
+  /* スムーズスクロール: ナビリンクをクリックしたとき滑らかに移動する */
+  scroll-behavior: smooth;
+  /* 1rem = 16px (デフォルト). フォントサイズの基準 */
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--fg);
+  /*
+    line-height: 行間の比率
+    1.7 = フォントサイズの 1.7 倍の行間 → 読みやすい
+  */
+  line-height: 1.7;
+  /* フォントをアンチエイリアスで滑らかにレンダリング */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* リンクのデフォルトスタイル（青色・下線）を解除 */
+a {
+  color: inherit;      /* 親要素の色を引き継ぐ */
+  text-decoration: none;
+}
+
+/* リストの黒丸を消す */
+ul {
+  list-style: none;
+}
+
+
+/* ═══════════════════════════════════════════════
+   3. ヘッダー（固定ナビゲーション）
+
+   position: fixed → スクロールしても画面上部に固定
+   z-index: 100    → 他の要素より手前に重なる
+                      (z-index が大きいほど手前)
+   ═══════════════════════════════════════════════ */
+.site-header {
+  position: fixed;  /* 固定表示（スクロールに追従しない） */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-h);
+
+  /*
+    すりガラス効果 (Glassmorphism):
+    半透明背景 + backdrop-filter: blur() で
+    背景をぼかして透けて見えるガラスのような効果
+  */
+  background: rgba(7, 12, 24, 0.80);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);  /* Safari 対応 (接頭辞 -webkit- が必要) */
+
+  /* 最初は透明なボーダー（スクロールしたら表示） */
+  border-bottom: 1px solid transparent;
+  z-index: 100;
+
+  /* transition: プロパティの変化をアニメーションする */
+  /* border-color 0.3s ease → 0.3秒かけてなめらかに変化 */
+  transition: border-color 0.3s ease;
+}
+
+/*
+  .scrolled クラスは JavaScript によって付与されます。
+  ページを少しスクロールしたら境界線が現れます。
+*/
+.site-header.scrolled {
+  border-bottom-color: var(--border);
+}
+
+/* ヘッダー内部のコンテナ（最大幅・中央揃えのためのラッパー） */
+.header-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;    /* 左右 auto でブロック中央揃え */
+  padding: 0 24px;
+  height: 100%;
+  display: flex;                   /* 子要素を横並び */
+  align-items: center;             /* 縦方向: 中央揃え */
+  justify-content: space-between;  /* 横方向: 両端揃え */
+}
+
+/* ロゴ "RM" */
+.logo {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+
+  /*
+    グラデーションテキスト:
+    background-clip: text → 背景をテキストの形で切り抜く
+    -webkit-text-fill-color: transparent → テキストを透明にして
+    背景グラデーションが透けて「文字がグラデーション」に見える
+  */
+  background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ナビリンク群（横並び） */
+.nav {
+  display: flex;
+  gap: 32px;  /* 各リンク間のスペース */
+}
+
+.nav a {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  /* transition: ホバー時の色変化を 0.2s でなめらかに */
+  transition: color 0.2s ease;
+}
+
+/* マウスホバー or アクティブ状態（現在のセクションに対応するリンク） */
+.nav a:hover,
+.nav a.active {
+  color: var(--fg);
+}
+
+
+/* ═══════════════════════════════════════════════
+   4. ヒーローセクション
+
+   ページを開いたとき最初に表示される全画面セクション。
+   左: テキスト情報 / 右: 顔写真 の2列グリッドレイアウト。
+   ═══════════════════════════════════════════════ */
+.hero {
+  position: relative;  /* 内部の絶対配置要素（星キャンバス）の基準点 */
+  min-height: 100svh;  /* svh = small viewport height (モバイルのアドレスバー除く) */
+  display: flex;
+  align-items: center;
+  padding-top: var(--nav-h);  /* ナビバー分だけ上余白 */
+  overflow: hidden;            /* はみ出た星を隠す */
+}
+
+/* ─── 星空キャンバス ─── */
+.star-canvas {
+  position: absolute;  /* ヒーローセクション内に重ねる */
+  inset: 0;  /* top:0; right:0; bottom:0; left:0; の一括指定 */
+  width: 100%;
+  height: 100%;
+  /* pointer-events: none → マウスイベントを受け取らない（クリックが下の要素に通る） */
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+/* ─── ヒーロー内部コンテナ ─── */
+.hero-inner {
+  position: relative;  /* z-index を効かせるために必要 */
+  z-index: 1;          /* 星キャンバスより手前に表示 */
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 64px 24px;
+  width: 100%;
+
+  /*
+    CSS Grid レイアウト:
+    grid-template-columns: 1fr auto
+      → 左列: 残り全スペース (1fr = 1 fraction = 比率割り当て)
+      → 右列: 内容に合わせた幅 (auto)
+  */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 80px;           /* 列間のスペース */
+  align-items: center; /* 縦方向中央揃え */
+}
+
+/* ─── 左カラム: テキスト ─── */
+.hero-text {
+  max-width: 580px;
+}
+
+/* 肩書きラベル（小さい大文字） */
+.hero-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;  /* 小文字→大文字に変換 */
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+/* メインの名前見出し */
+.hero-name {
+  /*
+    clamp(最小値, 推奨値, 最大値):
+    ウィンドウ幅に応じて自動でフォントサイズが変わる。
+    狭い画面では 34px, 広い画面では 72px, 中間は 5.5vw (画面幅の5.5%)
+  */
+  font-size: clamp(34px, 5.5vw, 72px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.025em;  /* 字間を少し詰める（大文字に映える） */
+  margin-bottom: 4px;
+
+  /* グラデーションテキスト: 白→アクセント青 */
+  background: linear-gradient(140deg, #ffffff 30%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 英語名（日本語名の下に表示） */
+.hero-name-en {
+  display: block;  /* 改行して別行に */
+  font-size: clamp(16px, 2.2vw, 28px);
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  margin-top: 10px;
+
+  /* グラデーントを打ち消して通常のテキスト色に */
+  background: none;
+  -webkit-text-fill-color: var(--muted);
+  color: var(--muted);
+}
+
+/* 所属機関 */
+.hero-affiliation {
+  font-size: 15px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 32px;
+  margin-top: 16px;
+}
+
+/* ─── 研究テーマ・趣味のタグ群 ─── */
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;  /* 幅が足りなくなったら折り返す */
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+/* 個別タグ（丸みのあるバッジ型） */
+.tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 14px;
+  border-radius: 20px;  /* 大きい値 → 完全な丸みになるカプセル型 */
+  background: var(--tag-bg);
+  color: var(--accent);
+  border: 1px solid rgba(110, 142, 251, 0.28);
+  letter-spacing: 0.04em;
+  /* ホバー時の変化を準備 */
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.tag:hover {
+  background: rgba(110, 142, 251, 0.18);
+  border-color: rgba(110, 142, 251, 0.5);
+}
+
+/* 英語タグ（PIML など）は同じ色で OK */
+.tag--en {
+  /* 特に差をつけないが、将来的に変更しやすいようクラスを分けている */
+}
+
+/* 趣味タグは紫系の色 */
+.tag--hobby {
+  background: rgba(167, 139, 250, 0.10);
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.28);
+}
+
+.tag--hobby:hover {
+  background: rgba(167, 139, 250, 0.18);
+  border-color: rgba(167, 139, 250, 0.5);
+}
+
+/* ─── スクロール誘導ボタン ─── */
+.scroll-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  /* gap と color の変化を 0.25s でなめらかに */
+  transition: color 0.25s ease, gap 0.25s ease;
+}
+
+.scroll-cta:hover {
+  color: var(--fg);
+  gap: 14px;  /* ホバー時に矢印が右にズレて動く効果 */
+}
+
+/* 矢印のバウンドアニメーション */
+.cta-arrow {
+  font-size: 16px;
+  display: inline-block;
+  animation: bounce 2.2s ease-in-out infinite;
+}
+
+/* @keyframes: アニメーションのキーフレーム定義 */
+/* bounce: 上下に揺れる動き */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0px); }   /* 通常位置 */
+  50%       { transform: translateY(5px); }  /* 少し下に */
+}
+
+
+/* ─── 右カラム: 顔写真 ─── */
+.hero-photo-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*
+  photo-ring-outer: 回転するグラデーションリング（外枠）
+
+  conic-gradient() = 円錐グラデーション: 中心から放射状に色が変わる
+  padding: 2px で「リングの太さ」を作っています。
+  内側を背景色で塗りつぶすと、外側だけがリングに見えます。
+*/
+.photo-ring-outer {
+  position: relative;
+  width: 270px;
+  height: 270px;
+  border-radius: 50%;  /* 円形にする */
+  background: conic-gradient(
+    from 0deg,
+    var(--accent)  0%,      /* 青 */
+    transparent    25%,
+    #a78bfa        55%,     /* 紫 */
+    transparent    75%,
+    var(--accent)  100%
+  );
+  padding: 2.5px;  /* このパディングがリングの太さになる */
+
+  /* ring-rotate アニメーションで8秒かけて1回転、無限ループ */
+  animation: ring-rotate 8s linear infinite;
+}
+
+/* グラデーションリングの回転アニメーション */
+@keyframes ring-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/*
+  photo-ring-inner: 内側を背景色で塗りつぶすことで、
+  外側 (photo-ring-outer) がリング形状に見える。
+*/
+.photo-ring-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--bg);  /* 背景色（深紺）で塗りつぶす */
+  padding: 6px;            /* 写真とリングの間の余白 */
+  overflow: hidden;        /* 写真が円からはみ出ないようにする */
+}
+
+/* 顔写真 */
+.profile-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;  /* 円形にする */
+
+  /*
+    object-fit: cover → 画像のアスペクト比を保ちながら
+    コンテナを隙間なく埋める（はみ出た部分は切り取られる）
+    object-fit: contain だとコンテナ内に収まるが余白ができる
+  */
+  object-fit: cover;
+  object-position: center;  /* 切り取りの基準点: 中央 */
+  display: block;
+}
+
+
+/* ═══════════════════════════════════════════════
+   5. セクション共通スタイル
+
+   すべてのコンテンツセクション（Research, Activities,
+   Contact）に共通して適用されるスタイルです。
+   ═══════════════════════════════════════════════ */
+.section {
+  padding: var(--section-py) 0;  /* 上下に大きめの余白 */
+  border-top: 1px solid var(--border);  /* セクション境界線 */
+}
+
+/* 交互背景: section--alt クラスで背景色を変える */
+.section--alt {
+  background: var(--bg-alt);
+}
+
+/* コンテンツを中央に寄せてページ端に貼り付かないようにするラッパー */
+.section-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 狭いセクション（Contact など、内容が少ないもの）用 */
+.section-inner--narrow {
+  max-width: 720px;
+}
+
+/* セクションタイトル（小さな大文字スタイル） */
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 52px;
+
+  /* タイトルの横に装飾線を追加（::after 擬似要素で実現） */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* タイトル右横の短い横線（装飾） */
+.section-title::after {
+  content: '';   /* 空テキストで要素を生成 */
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+
+/* ═══════════════════════════════════════════════
+   6. Publications セクション（論文カード）
+   ═══════════════════════════════════════════════ */
+
+/* 論文カードのリスト（縦に並べる） */
+.pub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 論文1件分のカード */
+.pub-card {
+  padding: 32px 32px 32px 28px;  /* 上 右 下 左（左だけ少し狭い） */
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;  /* 角を丸くする */
+
+  /*
+    border-left: カード左側のアクセントライン（太め）
+    これにより「カード感」が強まる
+  */
+  border-left: 3px solid var(--accent);
+
+  /* ホバー時に少し右にスライドする準備 */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.pub-card:hover {
+  transform: translateX(4px);  /* 右に 4px ズレる */
+  /* box-shadow: カードの周囲に光彩（グロー）効果 */
+  box-shadow: 0 4px 32px var(--glow), 0 0 0 1px rgba(110, 142, 251, 0.2);
+}
+
+/* ステータスバッジ（Unpublished / Published など） */
+.pub-status {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+/* 未出版: 黄色系バッジ */
+.pub-status--pending {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+/* 出版済み: 緑系バッジ（将来的に使う用） */
+.pub-status--published {
+  background: rgba(52, 211, 153, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+/* 論文タイトル */
+.pub-title {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.75;
+  color: var(--fg);
+  margin-bottom: 12px;
+}
+
+/* 補足テキスト（雑誌名・年など） */
+.pub-note {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+
+/* ═══════════════════════════════════════════════
+   7. Activities セクション（タイムライン形式）
+   ═══════════════════════════════════════════════ */
+
+/* 2列グリッド: 左「参加イベント」/ 右「発表」 */
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);  /* 等幅2列 */
+  gap: 72px;
+}
+
+/* グループのタイトル行 */
+.activity-group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* タイトル横のアイコン */
+.activity-group-title svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--accent);
+  flex-shrink: 0;  /* アイコンが縮まないようにする */
+}
+
+/* タイムラインリスト（縦に並ぶリスト） */
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1件のタイムラインアイテム */
+.timeline-item {
+  display: flex;
+  align-items: flex-start;  /* 長いテキストは上揃え */
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  transition: padding-left 0.2s ease;  /* ホバー時にインデント */
+}
+
+/* 最後のアイテムは下線なし */
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.timeline-item:hover {
+  padding-left: 6px;
+}
+
+/* 年号バッジ */
+.timeline-year {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  background: var(--tag-bg);
+  padding: 3px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;    /* 幅が縮まないようにする */
+  min-width: 44px;
+  text-align: center;
+  margin-top: 2px;   /* テキストとの垂直位置合わせ微調整 */
+}
+
+/* イベント名 */
+.timeline-name {
+  font-size: 14px;
+  color: var(--fg);
+  line-height: 1.6;
+}
+
+/* プレースホルダー（まだ内容がないとき） */
+.timeline-item--empty .timeline-name {
+  color: var(--muted);
+  font-style: italic;
+}
+
+
+/* ═══════════════════════════════════════════════
+   8. Contact セクション
+   ═══════════════════════════════════════════════ */
+
+/* リード文 */
+.contact-lead {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 40px;
+  line-height: 1.85;
+}
+
+/* 連絡先リスト */
+.contact-links {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1件の連絡先アイテム */
+.contact-item {
+  display: grid;
+  /*
+    3列グリッド: アイコン(20px) | テキスト情報(残り全部) | 矢印(20px)
+    これで「アイコン 左寄せ | テキスト 伸縮 | 矢印 右端」のレイアウトになる
+  */
+  grid-template-columns: 20px 1fr 20px;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 4px;
+  border-bottom: 1px solid var(--border);
+  /* ホバー時に右にズレる準備 */
+  transition: padding-left 0.2s ease;
+}
+
+/* 最初のアイテムにも上線を引く */
+.contact-item:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.contact-item:hover {
+  padding-left: 10px;
+}
+
+/* アイコン（fill で塗りつぶし色） */
+.contact-icon {
+  width: 18px;
+  height: 18px;
+  fill: var(--muted);
+  flex-shrink: 0;
+  transition: fill 0.2s ease;
+}
+
+.contact-item:hover .contact-icon {
+  fill: var(--accent);
+}
+
+/* テキスト情報（ラベル＋アドレスを縦に並べる） */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;  /* overflow が起きないための設定 */
+}
+
+/* 小さなラベル（「学部メール」「GitHub」など） */
+.contact-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* メールアドレス / URL */
+.contact-value {
+  font-size: 14px;
+  color: var(--fg);
+  letter-spacing: 0.02em;
+  /* 長いメールアドレスが画面端で折り返すようにする */
+  word-break: break-all;
+  transition: color 0.2s ease;
+}
+
+.contact-item:hover .contact-value {
+  color: var(--accent);
+}
+
+/*
+  矢印アイコン（stroke ベース: 線で描く）
+  fill ではなく stroke（輪郭線）で描かれているため
+  fill: none が必要です。
+*/
+.contact-arrow {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  stroke-linecap: round;   /* 線の端を丸くする */
+  stroke-linejoin: round;  /* 折れ目を丸くする */
+  justify-self: end;
+  transition: stroke 0.2s ease, transform 0.2s ease;
+}
+
+/* ホバーで矢印が右上に動く */
+.contact-item:hover .contact-arrow {
+  stroke: var(--accent);
+  transform: translate(2px, -2px);
+}
+
+
+/* ═══════════════════════════════════════════════
+   9. フッター
+   ═══════════════════════════════════════════════ */
+.site-footer {
+  padding: 32px 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+
+/* ═══════════════════════════════════════════════
+   10. フェードインアニメーション
+
+   JavaScript の IntersectionObserver と連携します。
+   要素が画面に入ったとき .visible クラスが追加され、
+   フェードイン＋上からスライドインが起動します。
+   ═══════════════════════════════════════════════ */
+
+/* アニメーション前: 透明で少し下にずれた状態 */
+.fade-in {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+/* 画面に入ったとき（JS が .visible を追加する）: 通常表示に */
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ═══════════════════════════════════════════════
+   11. レスポンシブ対応（スマートフォン・タブレット）
+
+   @media (max-width: 768px) は
+   「画面幅が 768px 以下のとき」にだけ適用するスタイルです。
+   タブレット・スマートフォン向けにレイアウトを変更します。
+   ═══════════════════════════════════════════════ */
+
+/* タブレット（〜768px） */
+@media (max-width: 768px) {
   :root {
-    --bg: #ffffff;
-    --fg: #111111;
-    --muted: #888888;
-    --border: #e0e0e0;
-    --accent: #111111;
-    --section-alt: #f8f8f8;
-  
-    --font-sans: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
-    --font-serif: Georgia, 'Times New Roman', serif;
-  
-    --nav-h: 64px;
-    --max-w: 1080px;
-    --section-py: 96px;
+    /* セクションの余白を少し縮小 */
+    --section-py: 72px;
   }
-  
-  html {
-    scroll-behavior: smooth;
-    font-size: 16px;
-  }
-  
-  body {
-    font-family: var(--font-sans);
-    background: var(--bg);
-    color: var(--fg);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-  }
-  
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-  
-  /* ===========================
-     Header
-     =========================== */
-  .site-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: var(--nav-h);
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid transparent;
-    z-index: 100;
-    transition: border-color 0.3s;
-  }
-  
-  .site-header.scrolled {
-    border-bottom-color: var(--border);
-  }
-  
-  .header-inner {
-    max-width: var(--max-w);
-    margin: 0 auto;
-    padding: 0 24px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .logo {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-  }
-  
-  .nav {
-    display: flex;
-    gap: 32px;
-  }
-  
-  .nav a {
-    font-size: 14px;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    transition: color 0.2s;
-  }
-  
-  .nav a:hover {
-    color: var(--fg);
-  }
-  
-  /* ===========================
-     Hero & Profile Image
-     =========================== */
-  .hero {
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-    padding-top: var(--nav-h);
-    padding-bottom: 64px;
-  }
-  
+
+  /* ヒーロー: 2列 → 1列に変更 */
   .hero-inner {
-    max-width: var(--max-w);
-    margin: 0 auto;
-    padding: 0 24px;
-    width: 100%;
-  }
-  
-  .profile-img-wrapper {
-    margin-bottom: 32px;
-  }
-  
-  .profile-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid var(--border);
-    transition: filter 0.3s ease;
-  }
-  
-  .profile-img:hover {
-    filter: grayscale(0%);
-  }
-  
-  .hero-label {
-    font-size: 12px;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-  
-  .hero-name {
-    font-size: clamp(40px, 8vw, 80px);
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    margin-bottom: 24px;
-  }
-  
-  .hero-name-en {
-    font-size: clamp(24px, 4vw, 40px);
-    color: var(--muted);
-    font-weight: 400;
-  }
-  
-  .hero-title {
-    font-size: 18px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-    margin-bottom: 40px;
-  }
-  
-  .hero-line {
-    width: 48px;
-    height: 1px;
-    background: var(--border);
-    margin-bottom: 24px;
-  }
-  
-  .hero-desc {
-    font-size: 15px;
-    color: var(--fg);
-    max-width: 600px;
-    line-height: 1.9;
-  }
-  
-  .hero-desc p {
-    margin-bottom: 8px;
-  }
-  
-  .scroll-down {
-    display: block;
-    margin-top: 56px;
-    width: 24px;
-    height: 40px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    position: relative;
-  }
-  
-  .scroll-down span {
-    display: block;
-    width: 4px;
-    height: 8px;
-    background: var(--fg);
-    border-radius: 2px;
-    position: absolute;
-    top: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: scrollDot 1.6s ease-in-out infinite;
-  }
-  
-  @keyframes scrollDot {
-    0%   { top: 6px; opacity: 1; }
-    80%  { top: 22px; opacity: 0; }
-    100% { top: 6px; opacity: 0; }
-  }
-  
-  /* ===========================
-     Sections
-     =========================== */
-  .section {
-    padding: var(--section-py) 0;
-    border-top: 1px solid var(--border);
-  }
-  
-  .section--alt {
-    background: var(--section-alt);
-  }
-  
-  .section-inner {
-    max-width: var(--max-w);
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-  
-  .section-inner--narrow {
-    max-width: 680px;
-  }
-  
-  .section-title {
-    font-size: 11px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 56px;
-  }
-  
-  /* ===========================
-     List Group (Research / Papers)
-     =========================== */
-  .list-group {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .list-item {
-    padding: 32px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    transition: background 0.2s;
-  }
-  
-  .list-item:hover {
-    background: #fafafa;
-  }
-  
-  .item-name {
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.6;
-    margin-bottom: 12px;
-  }
-  
-  .item-desc {
-    font-size: 14px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-  }
-  
-  /* ===========================
-     Skills / Activities
-     =========================== */
-  .skills-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;  /* 1列レイアウト */
     gap: 48px;
+    text-align: center;          /* テキストを中央揃え */
+    padding: 48px 24px;
   }
-  
-  .skill-group-title {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
+
+  /* 写真を上、テキストを下の順番に（grid-row で順序変更） */
+  .hero-photo-col {
+    order: -1;  /* 元の HTML の順序より前に表示 */
   }
-  
-  .skill-group ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+
+  .hero-text {
+    max-width: 100%;
   }
-  
-  .skill-group li {
-    font-size: 15px;
-    color: var(--fg);
-    padding-left: 14px;
-    position: relative;
-    line-height: 1.6;
+
+  /* 写真を少し小さくする */
+  .photo-ring-outer {
+    width: 200px;
+    height: 200px;
   }
-  
-  .skill-group li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 10px;
-    width: 4px;
-    height: 1px;
-    background: var(--muted);
+
+  /* タグを中央揃えに */
+  .hero-tags {
+    justify-content: center;
   }
-  
-  /* ===========================
-     Contact
-     =========================== */
-  .contact-lead {
-    font-size: 16px;
-    color: var(--fg);
-    margin-bottom: 48px;
-    line-height: 1.8;
+
+  /* スクロールボタンを中央に */
+  .scroll-cta {
+    margin: 0 auto;
   }
-  
-  .contact-links {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+
+  /* ナビのスペースを縮小 */
+  .nav {
+    gap: 20px;
   }
-  
-  .contact-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 15px;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--border);
-    transition: opacity 0.2s;
+
+  /* Activities: 2列 → 1列に */
+  .activities-grid {
+    grid-template-columns: 1fr;
+    gap: 52px;
   }
-  
-  .contact-item:first-child {
-    border-top: 1px solid var(--border);
-  }
-  
-  .contact-item:hover {
-    opacity: 0.5;
-  }
-  
-  .contact-item svg {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-    flex-shrink: 0;
-  }
-  
-  /* ===========================
-     Footer
-     =========================== */
-  .site-footer {
-    padding: 32px 24px;
-    border-top: 1px solid var(--border);
-    text-align: center;
+}
+
+/* スマートフォン（〜480px） */
+@media (max-width: 480px) {
+  .nav a {
     font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
   }
-  
-  /* ===========================
-     Animations
-     =========================== */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+
+  /* 論文カードの余白を縮小 */
+  .pub-card {
+    padding: 20px 16px 20px 14px;
   }
-  
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
+
+  /* 写真をさらに小さく */
+  .photo-ring-outer {
+    width: 160px;
+    height: 160px;
   }
-  
-  /* ===========================
-     Responsive
-     =========================== */
-  @media (max-width: 768px) {
-    :root {
-      --section-py: 64px;
-    }
-  
-    .nav {
-      gap: 20px;
-    }
-  
-    .skills-list {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
+
+  /* Contact の矢印を非表示（画面が狭すぎるとレイアウトが崩れるため） */
+  .contact-arrow {
+    display: none;
   }
-  
-  @media (max-width: 480px) {
-    .nav a {
-      font-size: 13px;
-    }
-    
-    .list-item {
-      padding: 24px;
-    }
+
+  .contact-item {
+    grid-template-columns: 20px 1fr;
   }
+}
