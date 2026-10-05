@@ -1,25 +1,17 @@
-# MyProfile
-## 要件
-以下の情報を掲載すること。
-### 基本情報
-|名前|持丸理貴(mochimaru riki)|
-|メール|mochimaru@astro1.sci.hokudai.ac.jp|
-|関心|突発天体—コンパクト天体—PIML:transient source—compact object—physics-informed machine learning|
-|趣味|violin-|
-+顔写真
+# MyProfile.io
 
-### 略歴
-|現所属|北海道大学理論宇宙研究室|
+持丸理貴の静的プロフィールサイトです。HTML と CSS だけで構成しているため、ビルド作業は不要です。
 
-### 論文
-- Development of Closure Relations for Astrophysical Turbulence Simulations Using an Image-Generating AI Model.(未出版)
-### 発表
+## ファイル
 
-### 参加したイベント
-- KEKサマーチャレンジ2025
-- 国立天文台スプリングスクール2025
-- 日本原子力研究開発機構 原子力科学研究所 先端基礎研究センターインターン(2023)
-- 数物セミナー26th
+- `index.html` — 掲載内容とページ構造
+- `style.css` — 配色、余白、レイアウト
+- `profile2.PNG` — トップページの顔写真
 
-### 見た目
-1. 静的
+## 更新方法
+
+1. 文章や研究・活動情報は `index.html` を編集します。
+2. 色や全体幅は `style.css` 冒頭の `:root` にある変数を編集します。
+3. 顔写真を差し替える場合は、同じファイル名の画像に置き換えます。表示は CSS で正方形に切り抜かれます。
+
+JavaScript とアニメーションは使用していません。
